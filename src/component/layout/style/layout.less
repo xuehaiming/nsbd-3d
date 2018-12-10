@@ -1,0 +1,121 @@
+/* 页面布局start */
+.ant-menu-vertical .ant-menu-item, .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-inline .ant-menu-submenu-title {
+    font-size: 16px;
+}
+.ant-layout-sider {
+    background: #313653;
+}
+.ant-menu-dark {
+    background: #313653;
+}
+.layout .ant-layout-sider-collapsed .ant-menu-submenu-vertical > .ant-menu-submenu-title:after {
+    display: none;
+}
+
+.ant-layout-sider-trigger {
+    background: #313653;
+}
+.ant-menu-inline .ant-menu-sub {
+    background: #313653;
+}
+.ant-menu-dark.ant-menu-inline .ant-menu-item-selected {
+    background: #1890ff;
+    // color: rgba(255, 255, 266, .9);
+}
+// .ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item-group-title, .ant-menu-dark .ant-menu-item > a{
+//     color: rgba(255, 255, 266, .9);
+// }
+.layout {
+    font-size: 16px;
+    position: relative;
+    height: 100vh;
+    .ant-layout-sider-collapsed {
+        .anticon {
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        .nav-text {
+            display: none;
+        }
+    }
+    .layout-logo {
+        border-radius: 6px;
+        background: #fff;
+        position: relative;
+        height: 36px;
+        line-height: 32px;
+        cursor: pointer;
+        margin: 16px;
+        overflow: hidden;
+        .logo-img {
+            float: left;
+            width: 28px;
+            margin: 4px 2px;
+        }
+        .logo-text {
+            float: left;
+            // position: absolute;
+            // vertical-align: text-bottom;
+            font-size: 22px;
+            text-transform: uppercase;
+            // display: inline-block;
+            color: #313653;
+        }
+    }
+    .layout-content {
+        width: 100vw;
+        height: 100vh;
+        margin: 0 0px;
+        background: #f0f2f5;
+    }
+}
+
+.layout-header {
+    position: relative;
+    box-shadow: 4px 4px 40px 0 rgba(0, 0, 0, .05);
+    background: #313653;
+    height: 65px;
+    line-height: 65px;
+    padding: 0;
+    .trigger {
+        height: 65px;
+        width: 65px;
+        line-height: 65px;
+        text-align: center;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        position: absolute;
+        -webkit-transition: all .3s cubic-bezier(.55, .055, .675, .19);
+        transition: all .3s cubic-bezier(.55, .055, .675, .19);
+    }
+    .layout-header-menu {
+        font-size: 16px;
+        float: right;
+        line-height: 64px;
+        text-align: center;
+        background: #313653;
+        color: #fff;
+    }
+}
+
+.layout-footer {
+    text-align: center;
+    height: 48px;
+    line-height: 48px;
+    padding: 0;
+    background: #fff;
+    margin-top: 20px;
+}
+
+.sub-title {
+    display: flex;
+    align-items: center;
+    img {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+}
+
+/* 页面布局end */
