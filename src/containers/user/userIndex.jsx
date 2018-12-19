@@ -22,14 +22,19 @@ class Main extends Component {
 	}
 	getData(){
 		$.ajax({
-			type: 'get',
-			url: 'http://172.16.157.4:8080/result/getWaterIndexByPoint',
+			type: 'post',
+			url: 'http://172.16.157.4:8080/result/getWaterIndex',
 			async: false,
+			data:{
+					startTime: "2017-09-30",
+					endTime: "2017-10-1"
+			},
 			// dataType: "jsonp",
 			success: function(data){
 				var result = JSON.parse(JSON.stringify(data));
-				console.log("点数据");
+				console.log("请求成功");
 				console.log(result);
+				return;
 			},
 			error: function(){
 				console.log("有问题");

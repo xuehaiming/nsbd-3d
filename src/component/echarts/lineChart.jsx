@@ -160,7 +160,7 @@ class Linechart extends Component {
     }
 	render() {
 		return (	
-            <div ref={ref=>{this.lineChart=ref}} style={{width: "100%", height: "500px"}}></div>
+            <div ref={ref=>{this.lineChart=ref}} style={{width: "100%", height: "300px"}}></div>
 		);
 	}
 }

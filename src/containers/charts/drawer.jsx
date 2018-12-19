@@ -3,7 +3,9 @@ import { Card ,Button } from 'antd';
 import img1 from '../../assets/chart1.png';
 import img2 from '../../assets/chart2.png';
 import img3 from '../../assets/chart3.png';
+import jcd from '../../assets/jcd.png';
 import './style/index.less';
+// import Linechart from '../../component/echarts/lineChart';
 export class Drawchart extends Component {
   state = { visible: false };
 
@@ -30,7 +32,7 @@ export class Drawchart extends Component {
                 extra={<a href="#">更多</a>}
                 style={{ width: 360,height: 280,marginTop: '0px' }}
             >
-               <img src={img1}/>
+               {/* <img src={jcd}/> */}
             </Card>
             <Card
                 title="浓度比率"

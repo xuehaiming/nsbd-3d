@@ -47,10 +47,10 @@ const home = (location, cb) => {
     }, 'home');
 }
 
-// 百度图表-折线图
+// 百度地图
 const chartLine = (location, cb) => {
     require.ensure([], require => {
-        cb(null, require('../containers/charts/lines').default)
+        cb(null, require('../containers/charts/baiduMap').default)
     }, 'chartLine');
 }
 
