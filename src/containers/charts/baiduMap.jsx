@@ -89,12 +89,13 @@ class Lines extends Component {
 			async: false,
 			data:{
 					startTime: "2017-09-30",
-					endTime: "2017-11-20"
+                    endTime: "2017-10-30",
+                    attr: "temperature"
 			},
 			// dataType: "jsonp",
 			success: function(data){
 				let result = JSON.parse(data);
-                console.log("请求成功");
+                console.log("(baidumap)请求数据成功");
                 this.setState({data:result});
                 console.log(result);
 				return;
@@ -105,10 +106,6 @@ class Lines extends Component {
         });
         setTimeout(()=>{
             this.state.data.forEach((item,idx)=>{
-                let color = 'rgba(255,0,0,1.0)';
-                if(idx%2){
-                    color = 'rgba(0,0,255,1.0)';
-                }
                 let time = item.time;
                 item.lineData.forEach((v,i)=>{
                     lineDataArr.push({
@@ -144,7 +141,7 @@ class Lines extends Component {
                 var mapvLayer2 = new mapv.baiduMapLayer(map, linedataSet, lineOpt);
                 var mapvLayer1 = new mapv.baiduMapLayer(map, pointdataSet, pointOpt);
                 //
-                var opts2 = {offset: new BMap.Size(1800, 16)}
+                var opts2 = {offset: new BMap.Size(1300, 16)}
                 map.addControl(new BMap.MapTypeControl(opts2));   
                 map.enableScrollWheelZoom(true);  
                 map.addControl(new BMap.ScaleControl());    

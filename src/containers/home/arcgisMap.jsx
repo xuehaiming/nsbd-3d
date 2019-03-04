@@ -1,31 +1,18 @@
 import React, { Component, PropTypes } from 'react'; // 引入了React和PropTypes
-import pureRender from 'pure-render-decorator';
-import { is, fromJS} from 'immutable';
 import { Router, Route, IndexRoute, browserHistory, History, Link } from 'react-router';
 import { connect } from 'react-redux';
 import esriLoader from 'esri-loader';
 import EsriLoader from 'esri-loader-react';
-import {Drawchart} from '../charts/drawer';
 import jcdPic from '../../assets/jcd.png';
 import yiwei from '../../assets/yiwei.png';
 import sanwei from '../../assets/sanwei.png';
-// 引入指标图例
-import ph from '../../assets/ph.png';
-import temperature from '../../assets/temperature.png';
-import turbidity from '../../assets/turbidity.png';
-import dissolvedOxygen from '../../assets/dissolvedOxygen.png';
-import nh4 from '../../assets/nh4.png';
-import conductivity from '../../assets/conductivity.png';
-
 // 公共面包屑
-import { Bcrumb } from '../../component/bcrumb/bcrumb';
 
 import styles from './style/home.less';
 
 import { Icon, Button, DatePicker, Progress, Spin, Slider, Select, Radio  } from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
-import { runInThisContext } from 'vm';
 const { RangePicker } = DatePicker;
 const Option = Select.Option;
 const RadioButton = Radio.Button;
@@ -34,7 +21,7 @@ var map;
 var timer;
 var tiledLayer;
 /* 以类的方式创建一个组件 */
-export default class Main extends Component {
+export class Arcgismap extends Component {
     state = {
         isloading: true,
         isplay: true,
@@ -45,42 +32,10 @@ export default class Main extends Component {
         attr:{key:'ph',label:'PH'},
         pointsJcd:[[111.7088729882136,32.67441803036789],
             [111.8417640595209,32.71667106861533],
-            [112.4582684715111,32.99300225179491],
-            [113.2409967893939,33.35950115029303],
-            [112.9440580723585,33.7021441875448],
-            [113.3137246929766,34.05131236968516],
-            [113.4359498197337,34.10673910367132],
-            [113.6698880280531,34.28106888127626],
-            [113.5756270522342,34.73359762035],
-            [113.2315686997872,34.87457012689574],
-            [113.193332025506,34.9016614283373],
-            [113.4719828072467,35.3823186330664],
-            [113.8211643584744,35.46097354694128],
-            [114.0272960862761,35.47378033347706],
-            [114.2797019226187,35.78811204588877],
-            [114.3188729484887,36.24966074853838],
-            [114.3214609677051,36.26061217836797],
-            [114.3855334016349,36.84140646791256],
-            [114.5305226594537,37.40672375424716],
-            [114.5064839773873,37.57290568437657],
-            [114.4226426247873,38.10824466130816],
-            [114.7888612708277,38.49527593545074],
-            [115.1644474235218,38.91268017345552],
-            [115.2605534206589,38.96023214725437],
-            [115.3710273178918,39.06684576325281]],
-        pointsFsk:[{name:"肖楼分水口",coordinates:[111.7529967,32.67336357]},//分水口数据集
-        {name:"望成岗分水口",coordinates:[111.8650545,32.78518775]},
-        {name:"彭家分水口",coordinates:	[112.014263,32.86244933]},
-        {name:"谭寨分水口",coordinates:	[112.2289913,32.94885048]},
-        {name:"高庄分水口",coordinates:	[113.0381862,33.87665579]},
-        {name:"三岔沟分水口",coordinates:[115.7848253,39.48988899]}
-        ],
+            ],
+        pointsFsk:[{name:"肖楼分水口",coordinates:[111.7529967,32.67336357]}],//分水口数据集
         pointsJzz: [{name:"陶岔渠渠首",coordinates:[111.7088387414464,32.67408870580463]},//节制闸数据集
-        {name:"刁河渡槽进口节制闸",coordinates:[111.8439682252548,32.71848623846933]},
-        {name:"湍河渡槽进口节制闸",coordinates:[111.9164884760591,32.87950560580975]},
-        {name:"沙河渡槽进口节制闸",coordinates:[112.9441216934944,33.70338006468847]},
-        {name:"玉带河倒虹吸出口节制闸",coordinates:[113.0393443500319,33.87992143070046]},
-        {name:"团城湖",coordinates:[116.2658917889931,39.98407074566595]}],
+        {name:"刁河渡槽进口节制闸",coordinates:[111.8439682252548,32.71848623846933]}],
         data: [{
             time:"2018-11-10-2:00",
             lineData :[{
@@ -103,29 +58,6 @@ export default class Main extends Component {
                 coordinates: [112.950385405954,33.6973220887955],
                 color: [255,0,0,255]
             }]
-        },
-        {
-            time:"2018-11-10-2:00",
-            lineData :[{
-                coordinates: [[  111.724657 , 32.678057 ],[ 111.744457 , 32.675236 ]],
-                color: [0,0,255,255]
-            },{
-                coordinates: [[111.88294,32.79133],[111.87875,32.81089]],
-                color: [0,0,255,255]
-            },{
-                coordinates: [[111.724657,32.678057],[111.744457,32.675236]],
-                color: [0,0,255,255]
-            }],
-            pointData:[{
-                coordinates:  [113.229404112387,33.4810125317654],
-                color: [0,0,255,255]
-            },{
-                coordinates: [113.042591915996,33.6498300186902],
-                color: [0,0,255,255]
-            },{
-                coordinates: [112.950385405954,33.6973220887955],
-                color: [0,0,255,255]
-            }]
         }],
         sliderValue : 0
     }
@@ -135,15 +67,14 @@ export default class Main extends Component {
     }
     
     componentDidMount(){
-            // this.getPointsData();
-            // this.getData();//获取水渐变数据
-            // this.initMap();//初始化地图
+            this.getPointsData();
+            this.getData();//获取水渐变数据
+            this.initMap();//初始化地图
     }
     
     changeDate(date,dateStr){
         console.log("你选择的时间段是："+dateStr);
         this.setState({startTime:dateStr[0],endTime:dateStr[1]});
-
         this.resizeMap();
         this.setState({isloading:true,isplay:true});
         setTimeout(()=>{
@@ -431,23 +362,7 @@ export default class Main extends Component {
             tiledLayer.hide();
         }
     }
-    play(){
-        this.setState({isplay:true});
-        let num = this.state.data.length;
-        let pauseIdx = this.state.sliderValue;
-        if(pauseIdx!==num){
-            this.aminate(pauseIdx);//从暂停的地方开始播放
-        }else{
-            map.getLayer(num).setOpacity(0);//重新开始播放
-            this.aminate(0);
-        }
-    }
-    pause(){
-        this.setState({isplay:false});
-        clearTimeout(timer);
-        console.log("停止");
-        return;
-    }
+
     render(){
         const length = this.state.data.length;
         const marks = {
@@ -468,74 +383,10 @@ export default class Main extends Component {
                         <RadioButton value="0">无底图</RadioButton>
                     </RadioGroup>
                     </div>
-                    <div className="range-picker">
-                        <Select
-                        labelInValue  
-                        defaultValue={{key:"ph"}} 
-                        style={{ width: 80,color:'#000'}}
-                        size = 'large' 
-                        onChange={this.changeTarget.bind(this)}>
-                            <Option value="ph">pH</Option>
-                            <Option value="temperature">温度</Option>
-                            <Option value="conductivity">电导率</Option>
-                            <Option value="turbidity">浊度</Option>
-                            <Option value="dissolvedOxygen">溶解氧</Option>
-                            <Option value="nh4">氨氮</Option>
-                        </Select>
-                        <RangePicker 
-                        size = 'large'
-                        defaultValue={[moment('2017-09-30', 'YYYY-MM-DD'), moment('2017-10-30', 'YYYY-MM-DD')]} 
-                        defaultPickerValue={[moment('2017-09-30', 'YYYY-MM-DD'), moment('2017-10-30', 'YYYY-MM-DD')]} 
-                        format={'YYYY-MM-DD'}
-                        onChange={this.changeDate.bind(this)}
-                        />
-                    </div>
                     <div className="loading" > 
                         <Spin size="large" tip="正在加载..." spinning={this.state.isloading}></Spin>
                     </div>
-                    <div className="slider-box">
-                        <sapn>{this.state.timeText}</sapn>
-                        <div className="slider">
-                              <Slider 
-                            defaultValue={0} 
-                            marks={marks}
-                            min = {0}
-                            max = {length}
-                            // dots = {true}
-                            step = {1}
-                            value = {this.state.sliderValue}
-                            /> 
-                        </div>
-                        {
-                            this.state.isplay?<Button type="primary" shape="circle" icon="pause" onClick={()=>this.pause()}/>
-                            :<Button type="primary" shape="circle" icon="caret-right" onClick={()=>this.play()}/>
-                        }
-                       
-                    </div>
-                    <div className="map-select">
-                        <div>
-                            <img src={yiwei} alt="aaa" style={{width:'100%',height:'100%'}}/>
-                        </div>
-                        <div>
-                            <img src={sanwei} alt="aaa" style={{width:'100%',height:'100%'}}/>
-                        </div>
-                    </div>
-                    <div className="attr-legend">
-                        <div className="legend-title">参考图例</div>
-                        <div className="legend-content">
-                            <img src={this.state.attr.key=='ph'?ph
-                            :this.state.attr.key=='temperature'?temperature
-                            :this.state.attr.key=='turbidity'?turbidity
-                            :this.state.attr.key=='dissolvedOxygen'?dissolvedOxygen
-                            :this.state.attr.key=='nh4'?nh4:conductivity} 
-                            alt="" style={{width:'100%',height:'100%'}}/> 
-                        </div>
-                    </div>
                 </div>
-                
-                </div>
-                <div className="drawer-chart" >
-                    <Drawchart startTime={this.state.startTime} endTime={this.state.endTime} attr={this.state.attr}></Drawchart>
                 </div>
             </div>
         )

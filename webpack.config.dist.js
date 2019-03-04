@@ -63,6 +63,13 @@ module.exports = {
             exclude: /node_modules/,
             use: ['file-loader?name=[name].[ext]']
         }, {
+            test: /\.mtl$/,
+            loader: 'mtl-loader'
+          },
+          { test: /\.obj$/,
+            loader: 'url-loader',
+            // include: paths.obj
+          }, {
             // 解析图片，小于8kb的转换成base64
             // 注意配种中的name,就是生成到了images文件夹下
             test: /\.(png|jpg|gif)$/, 

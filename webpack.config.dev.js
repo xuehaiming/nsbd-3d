@@ -14,7 +14,8 @@ var ROOT_PATH = path.resolve(__dirname);
 var APP_PATH = path.resolve(ROOT_PATH, 'src'); //__dirname 中的src目录，以此类推
 var APP_FILE = path.resolve(APP_PATH, 'app'); //根目录文件app.jsx地址
 var BUILD_PATH = path.resolve(ROOT_PATH, '/antd/dist'); // 发布文件所存放的目录
-
+process.traceDeprecation = true
+process.noDeprecation = true
 module.exports = {
     devtool: 'cheap-module-eval-source-map',
     entry: {
@@ -46,12 +47,34 @@ module.exports = {
         }, {
             test: /\.(eot|woff|svg|ttf|woff2|gif|appcache)(\?|$)/,
             exclude: /node_modules/,
-            use: ['file-loader?name=[name].[ext]'],
+            loader: 'file-loader',
+            options:{
+                name:'[name].[ext]'
+            },
+            // use: ['file-loader?name=[name].[ext]'],
             include: [APP_PATH]
         }, {
+            test: /\.mtl$/,
+            loader: 'file-loader',
+            options:{
+                name:'[name].[ext]'
+            }
+          },
+          { test: /\.obj$/,
+            loader: 'file-loader',
+            options:{
+                name:'[name].[ext]'
+            },
+            include: [APP_PATH]
+          }, {
             test: /\.(png|jpg|gif)$/,
             exclude: /node_modules/,
-            use: ['url-loader?limit=8192&name=images/[hash:8].[name].[ext]'],
+            loader: 'url-loader',
+            options:{
+                limit: 10,
+                name:'images/[name].[ext]'
+            },
+            // use: ['url-=loader?limit=10&name=images/[name].[ext]'],
             //注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片
             include: [APP_PATH]
         }, {

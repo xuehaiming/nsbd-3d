@@ -67,7 +67,7 @@ export class Lmenu extends Component {
                     <Menu.Item key="icon"><Link to="/general/icon">图标</Link></Menu.Item>
 							</SubMenu> */}
 							
-                <Menu.Item key="user">
+              <Menu.Item key="user">
 			        <Link to="/user">
 		              <Icon type="user" />
 		              {!this.props.collapsed && <span className="nav-text">用户管理</span>}
@@ -75,12 +75,12 @@ export class Lmenu extends Component {
 	            </Menu.Item>
 	           
 	            <Menu.Item key="adver">
-	            <Link to="/adver">
-	              <Icon type="notification" />
-	              {!this.props.collapsed && <span className="nav-text">其他管理</span>}
-	            </Link>
+								<Link to="/adver">
+									<Icon type="notification" />
+									{!this.props.collapsed && <span className="nav-text">三维展示</span>}
+								</Link>
 	            </Menu.Item>
-	            <SubMenu
+	            {/* <SubMenu
 	              key="sub1" title={<span><Icon type="team" /><span className="nav-text">人员管理</span></span>}
 	            >
 	              <Menu.Item key="oneui"><Link to="/ui/oneui">组件一</Link></Menu.Item>
@@ -89,13 +89,14 @@ export class Lmenu extends Component {
 	            <SubMenu key="sub2" title={<span><Icon type="setting" /><span className="nav-text">闸阀管理</span></span>}>
 			          <Menu.Item key="9">Option 9</Menu.Item>
 			          <Menu.Item key="10">Option 10</Menu.Item>
-			    		</SubMenu>
+							</SubMenu>
+							
 							<Menu.Item key="setting">
 	            <Link to="/setting">
 	              <Icon type="setting" />
-	              {!this.props.collapsed && <span className="nav-text">系统设置</span>}
+	              {!this.props.collapsed && <span className="nav-text">边界设置</span>}
 	            </Link>
-	            </Menu.Item>
+	            </Menu.Item> */}
 	        </Menu>
 		)
 	}

@@ -19,17 +19,10 @@ import img1 from '../../assets/model/model1.png'
 import img2 from '../../assets/model/model2.png'
 import img3 from '../../assets/model/model3.png'
 import img4 from '../../assets/model/model4.png'
-import google from '../../assets/textures/google.jpg'
-import back from '../../assets/textures/skybox/back.png'
-import bottom from '../../assets/textures/skybox/bottom.png'
-import front from '../../assets/textures/skybox/front.png'
-import left from '../../assets/textures/skybox/left.png'
-import right from '../../assets/textures/skybox/right.png'
-import top from '../../assets/textures/skybox/top.png'
 import '../../assets/model/model.obj'
 import '../../assets/model/model.mtl'
 
-var directions = [right,left,top,bottom,back,front];
+
 class Adver extends Component {
     constructor(props) {
 		super(props);
@@ -50,14 +43,13 @@ class Adver extends Component {
 
 			var container, stats;
 
-			var camera, renderer;
+			var camera, scene, renderer;
 
 			var mouseX = 0, mouseY = 0;
 
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
-			
-			var scene = new THREE.Scene();
+
 
 			init();
 			animate();
@@ -68,57 +60,24 @@ class Adver extends Component {
 				
 				// container = document.createElement( 'div' );
 				// document.body.appendChild( container );
-				
-				//camera
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-				camera.position.x = 0;
-				camera.position.y = 0;
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.x = -400;
+				camera.position.y = 1050;
 				camera.position.z = 250;
-				camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-				//Light
+				// scene
+
+				scene = new THREE.Scene();
+
 				var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
-				scene.add(ambientLight);
-				var spotLight = new THREE.SpotLight(0xffffff);
-				spotLight.position.set(1000, 1000, -1000);
-				spotLight.intensity = 2;
-				scene.add(spotLight);
-				scene.add(camera);
+				scene.add( ambientLight );
 
-				// create the ground plane
-				var planeGeometry = new THREE.PlaneGeometry(1000,1000,1,1);
-				var texture = THREE.ImageUtils.loadTexture(google,null,function(t)
-				{
-				});
-				var planeMaterial =  new THREE.MeshBasicMaterial({map:texture});
-				var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-				plane.receiveShadow  = true;
+				var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
+				camera.add( pointLight );
+				scene.add( camera );
 
-				// rotate and position the plane
-				plane.rotation.x=-0.5*Math.PI;
-				plane.position.x= 0;
-				plane.position.y= -40;
-				plane.position.z= 0;
+				// model
 
-				scene.add(plane);
-
-				// skybox
-				// var path = "textures/skybox/";//设置路径
-				// var directions  = ["right", "left", "top", "bottom", "back", "front"];//获取对象
-				// var format = ".png";
-				//创建盒子，并设置天空盒子的大小为( 1000, 1000, 1000 )
-				var skyGeometry = new THREE.BoxGeometry( 1000, 1000, 1000 );
-				var materialArray = [];
-				for (var i = 0; i < 6; i++)
-					materialArray.push( new THREE.MeshBasicMaterial({
-						map: THREE.ImageUtils.loadTexture(directions[i]),//将图片纹理贴上
-						side: THREE.BackSide/*镜像翻转，如果设置镜像翻转，那么只会看到黑漆漆的一片，因为你身处在盒子的内部，所以一定要设置镜像翻转。*/
-					}));
-				var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-				var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );//创建一个完整的天空盒，填入几何模型和材质的参数
-				scene.add( skyBox );
-				
-				// obj_mtl model
 				var onProgress = function ( xhr ) {
 
 					if ( xhr.lengthComputable ) {
@@ -132,8 +91,11 @@ class Adver extends Component {
 
 				var onError = function () { };
 
+				//THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
 				let mtlLoader = new THREE.MTLLoader();
 				let objLoader = new THREE.OBJLoader();
+
 				
 					mtlLoader.setPath( 'http://localhost:8082/antd/dist/' )
 					.load( 'model.mtl', function ( materials ) {
@@ -143,23 +105,22 @@ class Adver extends Component {
 							objLoader.setMaterials( materials )
 							.setPath( 'http://localhost:8082/antd/dist/' )
 							.load( 'model.obj', function ( object ) {
-							//set model position  rotation  scale
-							object.rotation.x = -Math.PI / 2;
-							object.rotation.z = -Math.PI / 2;
-							//object.position.x = -90;
-							object.scale.set(2, 2, 2);
-							scene.add( object );
+								object.position.y = - 95;
+								scene.add( object );
 							}, onProgress, onError );
 					} );
 					console.log(mtlLoader);
 
-				
+				//
+
 				renderer = new THREE.WebGLRenderer();
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				// container.appendChild( renderer.domElement );
 				$("#WebGL-output").append(renderer.domElement);
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
@@ -195,32 +156,26 @@ class Adver extends Component {
 
 			function render() {
 
-				camera.position.x += ( mouseX - camera.position.x ) * 0.001;
-				camera.position.y += ( - mouseY - camera.position.y ) * 0.001;
-				if (camera.position.x > 20) 
-					camera.position.x = 20;
-				if (camera.position.x < -40) 
-					camera.position.x = -40;
-				if (camera.position.y < -30) 
-					camera.position.y = -30;
-				if (camera.position.z >= -60)
-					//camera沿着z轴负方向（屏幕里面）移动
-					// setTimeout(function(){
-						camera.position.z -= 0.4;
-					// },500);
+				camera.position.x += ( mouseX - camera.position.x ) * .05;
+				camera.position.y += ( - mouseY - camera.position.y ) * .05;
+
+				camera.lookAt( scene.position );
+
 				renderer.render( scene, camera );
+
 			}
+			
 	}
 	render() {
-		// let width = window.innerWidth;
-		// let height = window.innerHeight;
+		let width = window.innerWidth;
+		let height = window.innerHeight;
 		return (
 		<div className="ader-container">
 			<div id="WebGL-output">
 			</div>
-			{/* <div className="drawer-chart" >
+			<div className="drawer-chart" >
 				<Drawchart></Drawchart>
-			</div> */}
+			</div>
 		</div>
 		);
 	  }
